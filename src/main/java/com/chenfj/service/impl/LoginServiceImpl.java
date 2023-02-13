@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -53,4 +54,20 @@ public class LoginServiceImpl implements LoginService {
         redisCache.setCacheObject("login:"+userId,loginUserDetails);
         return new ResponseResult(ResponseResult.CodeStatus.OK,"登录成功",map);
     }
+
+    @Override
+    public ResponseResult logout() {
+        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        LoginUserDetails  loginUserDetails= (LoginUserDetails) authentication.getPrincipal();
+        String id = loginUserDetails.getSysUser().getId().toString();
+
+        redisCache.deleteObject("login:"+id);
+        ResponseResult<Object> objectResponseResult = new ResponseResult<>();
+        objectResponseResult.setCode(ResponseResult.CodeStatus.OK);
+        objectResponseResult.setMessage("推出登录");
+        objectResponseResult.setData(id);
+        return objectResponseResult;
+    }
+
+
 }

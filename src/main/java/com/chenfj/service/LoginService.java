@@ -11,4 +11,6 @@ import com.chenfj.domain.ResponseResult;
  */
 public interface LoginService {
     ResponseResult login(LoginUserRequestParam userRequestParam);
+
+    ResponseResult logout();
 }

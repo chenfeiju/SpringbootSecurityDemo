@@ -25,4 +25,10 @@ public class LoginController {
         return responseResult;
     }
 
+    @PostMapping("/user/logout")
+    public ResponseResult logout(){
+        ResponseResult responseResult  = loginService.logout();
+        return responseResult;
+    }
+
 }
